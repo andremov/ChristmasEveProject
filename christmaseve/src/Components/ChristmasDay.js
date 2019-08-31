@@ -3,20 +3,45 @@ import React, {Component} from 'react';
 export class ChristmasDay extends Component {
 
     state = {
-        diff: 0
+        rows : [],
+        diff : 0
     };
 
     componentDidMount() {
-        let current = new Date(2019, 11, 26);
+        let current = new Date(2019, 11, 27);
         let nextChristmas =new Date (current.getFullYear(),11,25);
         let diff = this.daysBetween(current, nextChristmas);
         if (diff < 0) {
             nextChristmas =new Date (current.getFullYear()+1,11,25);
             diff = this.daysBetween(current, nextChristmas);
         }
-        this.setState(  {
-          diff
-        });
+
+        let rows = [];
+        if (diff !== 0) {
+
+            let wordsPerRow = 21;
+            let maxRows = Math.ceil((diff-1)/wordsPerRow);
+
+            let lastRowWords = ((diff-1)/wordsPerRow);
+            lastRowWords = lastRowWords%1;
+            lastRowWords = Math.ceil(lastRowWords*wordsPerRow);
+
+            for (let row = 0; row < maxRows; row++) {
+                rows[row] = [];
+                rows[row].key = row;
+                rows[row].words = [];
+                let maxWords = row === maxRows-1? lastRowWords : wordsPerRow;
+                for (let word = 0; word < maxWords; word++) {
+                    rows[row].words[word] = [];
+                    rows[row].words[word].name = 'Eve';
+                    rows[row].words[word].key = word;
+                }
+            }
+        }
+        this.setState({
+            rows,
+            diff
+        })
     }
 
     daysBetween = function( dt1, dt2 ) {
@@ -28,13 +53,29 @@ export class ChristmasDay extends Component {
         let difference = nd2 - nd1;
 
         return Math.ceil(difference/one_day);
-    }
+    };
 
     render() {
-        const diff = this.state.diff;
+        const rows = this.state.rows;
+        const diff = this.state.d;
+
         return(
-            <div>
-                {diff === 0 ? 'Christmas Day!' : diff + ' days left'}
+            <div className='text-center flex'>
+                <span className='font-huge'>It is</span>
+                <span className='font-large'>{diff === 0 ? ' Christmas Day!' : ' Christmas Eve '}</span>
+                {rows.map(row => {
+                    return (
+                    <span key = {row.key}>
+                        {row.words.map(word => {
+                            return(
+                            <span key={word.key}>
+                                {word.name + ' '}
+                            </span>
+                            )
+                        })}
+                    </span>
+                    )
+                })}
             </div>
         );
     }
