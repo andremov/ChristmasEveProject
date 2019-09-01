@@ -8,6 +8,7 @@ export class ChristmasDay extends Component {
     };
 
     componentDidMount() {
+
         let current = new Date(2019, 11, 27);
         let nextChristmas =new Date (current.getFullYear(),11,25);
         let diff = this.daysBetween(current, nextChristmas);
@@ -19,22 +20,24 @@ export class ChristmasDay extends Component {
         let rows = [];
         if (diff !== 0) {
 
-            let wordsPerRow = 21;
-            let maxRows = Math.ceil((diff-1)/wordsPerRow);
-
-            let lastRowWords = ((diff-1)/wordsPerRow);
-            lastRowWords = lastRowWords%1;
-            lastRowWords = Math.ceil(lastRowWords*wordsPerRow);
-
-            for (let row = 0; row < maxRows; row++) {
+            let rowWords = 4;
+            let row = 0;
+            let w = diff-1;
+            while (w > 0) {
                 rows[row] = [];
                 rows[row].key = row;
                 rows[row].words = [];
-                let maxWords = row === maxRows-1? lastRowWords : wordsPerRow;
-                for (let word = 0; word < maxWords; word++) {
+                rows[row].size = (15-(3*row))+'em';
+                for (let word = 0; word < rowWords; word++) {
                     rows[row].words[word] = [];
                     rows[row].words[word].name = 'Eve';
                     rows[row].words[word].key = word;
+                }
+                w -= rowWords;
+                row ++;
+                rowWords ++;
+                if (rowWords > 8) {
+                    rowWords = 14;
                 }
             }
         }
@@ -57,15 +60,15 @@ export class ChristmasDay extends Component {
 
     render() {
         const rows = this.state.rows;
-        const diff = this.state.d;
+        const diff = this.state.diff;
 
         return(
-            <div className='text-center flex'>
-                <span className='font-huge'>It is</span>
-                <span className='font-large'>{diff === 0 ? ' Christmas Day!' : ' Christmas Eve '}</span>
+            <div className='center color-blue p-5 d-block w-80 text-center flex'>
+                <span className='font-size-huge'>Today is</span>
+                <span className='font-size-large'>{diff === 0 ? ' Christmas Day!' : ' Christmas Eve '}</span>
                 {rows.map(row => {
                     return (
-                    <span key = {row.key}>
+                    <span style={{fontSize: row.size}} key = {row.key}>
                         {row.words.map(word => {
                             return(
                             <span key={word.key}>
