@@ -20,14 +20,14 @@ export class ChristmasDay extends Component {
         let rows = [];
         if (diff !== 0) {
 
-            let rowWords = 4;
+            let rowWords = 12;
             let row = 0;
             let w = diff-1;
             while (w > 0) {
                 rows[row] = [];
                 rows[row].key = row;
                 rows[row].words = [];
-                rows[row].size = (15-(3*row))+'em';
+                rows[row].size = (6-(0.125*row))+'em';
                 for (let word = 0; word < rowWords; word++) {
                     rows[row].words[word] = [];
                     rows[row].words[word].name = 'Eve';
@@ -35,10 +35,7 @@ export class ChristmasDay extends Component {
                 }
                 w -= rowWords;
                 row ++;
-                rowWords ++;
-                if (rowWords > 8) {
-                    rowWords = 14;
-                }
+                rowWords += 0;
             }
         }
         this.setState({
