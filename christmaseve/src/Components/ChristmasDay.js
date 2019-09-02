@@ -4,12 +4,33 @@ export class ChristmasDay extends Component {
 
     state = {
         rows : [],
-        diff : 0
+        diff : 0,
+        lastDate : 0
     };
 
-    componentDidMount() {
 
-        let current = new Date(2019, 11, 27);
+    constructor(props, context) {
+        super(props, context);
+
+        this.checkDate = this.checkDate.bind(this);
+    }
+
+    componentDidMount() {
+        this.calcDiff();
+
+        setInterval(this.checkDate, 1000);
+    }
+
+    checkDate = function() {
+        let current = new Date();
+        const lastChecked = this.state.date;
+        if (lastChecked !== current.getDate()) {
+            this.calcDiff();
+        }
+    };
+
+    calcDiff = function() {
+        let current = new Date();
         let nextChristmas =new Date (current.getFullYear(),11,25);
         let diff = this.daysBetween(current, nextChristmas);
         if (diff < 0) {
@@ -40,9 +61,10 @@ export class ChristmasDay extends Component {
         }
         this.setState({
             rows,
-            diff
+            diff,
+            date : current.getDate()
         })
-    }
+    };
 
     daysBetween = function( dt1, dt2 ) {
         let one_day=1000*60*60*24;
@@ -56,11 +78,10 @@ export class ChristmasDay extends Component {
     };
 
     render() {
-        const rows = this.state.rows;
-        const diff = this.state.diff;
+        let {rows, diff} = this.state;
 
         return(
-            <div className='center color-blue p-5 d-block w-80 text-center flex'>
+            <div className='p-5 d-block flex'>
                 <span className='font-size-huge'>Today is</span>
                 <span className='font-size-large'>{diff === 0 ? ' Christmas Day!' : ' Christmas Eve '}</span>
                 {rows.map(row => {
