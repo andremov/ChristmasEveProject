@@ -4,8 +4,8 @@ export class ChristmasDay extends Component {
 
     state = {
         rows : [],
-        diff : 0,
-        lastDate : 0
+        diff : -1,
+        date : 0
     };
 
 
@@ -16,8 +16,6 @@ export class ChristmasDay extends Component {
     }
 
     componentDidMount() {
-        this.calcDiff();
-
         setInterval(this.checkDate, 1000);
     }
 
@@ -41,7 +39,7 @@ export class ChristmasDay extends Component {
         let rows = [];
         if (diff !== 0) {
 
-            let rowWords = 12;
+            let maxRowWords = 12;
             let row = 0;
             let w = diff-1;
             while (w > 0) {
@@ -49,6 +47,7 @@ export class ChristmasDay extends Component {
                 rows[row].key = row;
                 rows[row].words = [];
                 rows[row].size = (6-(0.125*row))+'em';
+                let rowWords = Math.min(w,maxRowWords);
                 for (let word = 0; word < rowWords; word++) {
                     rows[row].words[word] = [];
                     rows[row].words[word].name = 'Eve';
@@ -79,24 +78,29 @@ export class ChristmasDay extends Component {
 
     render() {
         let {rows, diff} = this.state;
-
+        console.log(this.state);
         return(
-            <div className='p-5 d-block flex'>
-                <span className='font-size-huge'>Today is</span>
-                <span className='font-size-large'>{diff === 0 ? ' Christmas Day!' : ' Christmas Eve '}</span>
-                {rows.map(row => {
-                    return (
-                    <span style={{fontSize: row.size}} key = {row.key}>
-                        {row.words.map(word => {
-                            return(
-                            <span key={word.key}>
-                                {word.name + ' '}
-                            </span>
-                            )
-                        })}
-                    </span>
-                    )
-                })}
+            <div>
+                <div className='p-5 d-block flex'>
+                    <span className='font-size-huge'>Today is</span>
+                    <span className='font-size-large'>{diff === -1 ? 'A Special Day!' : diff === 0 ? 'Christmas Day!' : ' Christmas Eve '}</span>
+                    {rows.map(row => {
+                        return (
+                        <span style={{fontSize: row.size}} key = {row.key}>
+                            {row.words.map(word => {
+                                return(
+                                <span key={word.key}>
+                                    {word.name + ' '}
+                                </span>
+                                )
+                            })}
+                        </span>
+                        )
+                    })}
+                </div>
+                <div style={{visibility: 'hidden', width: '90%', maxWidth: '900px', margin: 'auto', backgroundColor: 'rgba(80,80,150,1)'}}>
+                    <div style={{width: (((365-diff) / 365) * 100)+'%', display: 'block', height: 20+'px', backgroundColor: 'rgba(255,255,255,0.25)'}} />
+                </div>
             </div>
         );
     }
