@@ -82,7 +82,7 @@ export class ChristmasDay extends Component {
         return(
             <div>
                 <div className='p-5 d-block flex'>
-                    <span className='font-size-huge'>Today is</span>
+                    <span className='font-size-huge'>Today is...</span>
                     <span className='font-size-large'>{diff === -1 ? 'A Special Day!' : diff === 0 ? 'Christmas Day!' : ' Christmas Eve '}</span>
                     {rows.map(row => {
                         return (
