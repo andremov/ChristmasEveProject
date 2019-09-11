@@ -35,7 +35,7 @@ export class ChristmasDay extends Component {
             nextChristmas =new Date (current.getFullYear()+1,11,25);
             diff = this.daysBetween(current, nextChristmas);
         }
-        
+
         let rows = [];
         if (diff !== 0) {
 
